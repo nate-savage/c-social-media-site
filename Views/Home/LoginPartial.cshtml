@@ -1,0 +1,16 @@
+@using FinalProject.Models
+@model Login
+<form asp-action="LoginSubmit">
+    <div>
+        <span asp-validation-for="LogEmail"></span>
+        <label asp-for="LogEmail"></label>
+        <input type="text" asp-for="LogEmail">
+    </div>
+    <div>
+        <span asp-validation-for="LogPassword"></span>
+        <label asp-for="LogPassword"></label>
+        <input type="Password" asp-for="LogPassword">
+    </div>
+    <input type="submit" value="Login">
+
+</form>
