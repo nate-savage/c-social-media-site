@@ -1,14 +1,19 @@
 @model User
 <form asp-action="UserSubmit">
         <div>
-            <span asp-validation-for="Name"></span>
-            <label asp-for="Name"></label>
-            <input type="text" asp-for="Name">
+            <span asp-validation-for="DisplayName"></span>
+            <label asp-for="DisplayName"></label>
+            <input type="text" asp-for="DisplayName">
         </div>
         <div>
             <span asp-validation-for="Email"></span>
             <label asp-for="Email"></label>
             <input type="text" asp-for="Email">
+        </div>
+        <div>
+            <span asp-validation-for="Handle"></span>
+            <label asp-for="Handle"></label>
+            <input type="text" asp-for="Handle">
         </div>
         <div>
             <span asp-validation-for="Password"></span>

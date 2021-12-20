@@ -13,7 +13,11 @@ namespace FinalProject.Models
 
         [Required]
         [MinLength(2,ErrorMessage ="Name too short!")]
-        public string Name { get; set; }
+        
+        public string DisplayName { get; set; }
+        [Required]
+        [MinLength(2,ErrorMessage ="Handle too short!")]
+        public string Handle { get; set; }
         [Required]
         [EmailAddress(ErrorMessage ="Must be a valid email address.")]
         public string Email { get; set; }
