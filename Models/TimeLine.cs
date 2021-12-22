@@ -7,6 +7,6 @@ namespace FinalProject.Models
 {
     public class TimeLine
     {
-        public List<Post> TLPosts { get; set; }
+        public List<TextPost> TLPosts { get; set; }
     }
 }

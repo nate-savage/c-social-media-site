@@ -9,9 +9,9 @@ namespace FinalProject.Models
         [Key]
         public int ReplyId { get; set; }
         public int OrigId { get; set; }
-        public Post Orig { get; set; }
+        public TextPost Orig { get; set; }
         public int ResponseId { get; set; }
-        public Post Response { get; set; }
+        public TextPost Response { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;

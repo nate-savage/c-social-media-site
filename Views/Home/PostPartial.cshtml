@@ -1,0 +1,16 @@
+@model TextPost
+<form asp-action="PostSubmit">
+        <div>
+            <div>
+
+            <span asp-validation-for="Text"></span>
+            </div>
+            
+            <textarea Asp-for="Text" cols="30" rows="5"></textarea>
+            
+        <div>
+
+        <input type="submit" value="Post">
+        </div>
+
+    </form>

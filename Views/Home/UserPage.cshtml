@@ -1,0 +1,70 @@
+@using FinalProject.Models;
+@model UserPageView
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>FinalProject</title>
+</head>
+<body>
+    <div  class="container p-3 d-flex flex-column justify-content-center ml-20">
+
+        <div class="row">
+
+            <a href="/logout">logout</a>
+        </div>
+
+        <div class="row">
+
+            <h1><a href="/home">home</a></h1>
+        </div>
+
+        <div>
+            <h2>@Model.PageOwner.DisplayName's Page</h2>
+        </div>
+        @if(@Model.PageOwner.UserId!=@Model.SiteUser.UserId)
+        {
+
+        <div>
+            @if(@Model.follows)
+            {
+                <a href="/unfollow/@Model.PageOwner.UserId">Unfollow</a>
+            }
+            else
+            {
+                <a href="/follow/@Model.PageOwner.UserId">Follow</a>
+            }
+        
+        </div >
+        }
+
+        <div class="col-5">
+
+        @foreach(TextPost post in @Model.TLPosts)
+        {
+        <div class="row border border-primary rounded m-2 p-2 w-20 h-25" >  
+
+                <div >
+                    <p ><span class="font-weight-bold">@post.Creator.DisplayName</span>  
+                    <a href="/user/@post.CreatorId">@@@post.Creator.Handle </a>
+                    <br>@post.Text
+                    <br>
+                    <a href="/changelike/@post.TextPostId/home">❤️</a> @post.LikedBy.Count likes
+                    <br>
+                    <a href="/repost/@post.TextPostId/home">🔁</a> @post.SharedBy.Count shares</p>
+                    
+                </div>
+
+            </div>
+        
+        }
+        </div>
+
+    
+    
+    </div>
+</body>
+</html>

@@ -3,14 +3,16 @@ using System;
 using FinalProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FinalProject.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20211221173910_includedLikesShares")]
+    partial class includedLikesShares
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,7 +136,10 @@ namespace FinalProject.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("CreatorId")
+                    b.Property<int>("CreaterId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreatorUserId")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -147,7 +152,7 @@ namespace FinalProject.Migrations
 
                     b.HasKey("TextPostId");
 
-                    b.HasIndex("CreatorId");
+                    b.HasIndex("CreatorUserId");
 
                     b.ToTable("TextPosts");
                 });
@@ -249,9 +254,7 @@ namespace FinalProject.Migrations
                 {
                     b.HasOne("FinalProject.Models.User", "Creator")
                         .WithMany()
-                        .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CreatorUserId");
                 });
 #pragma warning restore 612, 618
         }
