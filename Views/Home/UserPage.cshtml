@@ -25,6 +25,9 @@
         <div>
             <h2>@Model.PageOwner.DisplayName's Page</h2>
         </div>
+        <div>
+            <h3>followers: @Model.PageOwner.NumFollowers following: @Model.PageOwner.NumFollowing</h3>
+        </div>
         @if(@Model.PageOwner.UserId!=@Model.SiteUser.UserId)
         {
 
@@ -42,24 +45,10 @@
         }
 
         <div class="col-5">
-
+        
         @foreach(TextPost post in @Model.TLPosts)
         {
-        <div class="row border border-primary rounded m-2 p-2 w-20 h-25" >  
-
-                <div >
-                    <p ><span class="font-weight-bold">@post.Creator.DisplayName</span>  
-                    <a href="/user/@post.CreatorId">@@@post.Creator.Handle </a>
-                    <br>@post.Text
-                    <br>
-                    <a href="/changelike/@post.TextPostId/home">❤️</a> @post.LikedBy.Count likes
-                    <br>
-                    <a href="/repost/@post.TextPostId/home">🔁</a> @post.SharedBy.Count shares</p>
-                    
-                </div>
-
-            </div>
-        
+            @Html.Partial("TextPostPartial", post)
         }
         </div>
 

@@ -106,6 +106,11 @@ namespace FinalProject.Controllers
                 },
                 SiteUser = _context.Users.FirstOrDefault(us=>us.UserId==userId)
             };
+            foreach(TextPost post in renderMe.timeLine.TLPosts)
+            {
+                post.SetQuality();
+            }
+            renderMe.timeLine.TLPosts = renderMe.timeLine.TLPosts.OrderByDescending(po=>po.Quality).ToList();
             return View("Home",renderMe);
         }
         [HttpGet("timeline/{id}")]
@@ -137,14 +142,29 @@ namespace FinalProject.Controllers
                     .Include(blah=>blah.LikedBy)
                     .Include(blah=>blah.SharedBy)
                     .Where(pos=>pos.CreatorId==followConnect.FolloweeId).ToList());
+                //add reposts
+                List<Share> shareConnects = _context.Shares
+                .Include(sh=>sh.Post)
+                    .ThenInclude(pos=>pos.LikedBy)
+                .Include(sh=>sh.Post)
+                    .ThenInclude(pos=>pos.Creator)
+                    .Where(sh=>sh.SharerId==followConnect.FolloweeId).ToList();
+                foreach(Share connect in shareConnects)
+                {
+                    connect.Post.isRT=true;
+                    connect.Post.Reposter=_context.Users.FirstOrDefault(us=>us.UserId==followConnect.FolloweeId);
+                    renderMe.TLPosts.Add(connect.Post);
+                }
 
             }
-            // renderMe.TLPosts = renderMe.TLPosts.OrderByDescending(li=>li.CreatedAt).ToList();
+            //add the quality score to each post
             foreach (TextPost post in renderMe.TLPosts)
             {
                 post.SetQuality();
             }
             renderMe.TLPosts = renderMe.TLPosts.OrderByDescending(li=>li.Quality).ToList();
+            renderMe.SiteUser.NumFollowers = _context.Follows.Count(fol=>fol.FolloweeId==userId);
+            renderMe.SiteUser.NumFollowing =_context.Follows.Count(fol=>fol.FollowerId==userId);
 
             return View("TimeLine",renderMe);
         }
@@ -186,7 +206,25 @@ namespace FinalProject.Controllers
                     .ToList(),
                 SiteUser = _context.Users.FirstOrDefault(us=>us.UserId==userId)
             };
-            //add rts to this eventually
+            renderMe.PageOwner.NumFollowers = _context.Follows.Count(fol=>fol.FolloweeId==id);
+            renderMe.PageOwner.NumFollowing =_context.Follows.Count(fol=>fol.FollowerId==id);
+            //adds rts
+            List<Share> sharesConnects = _context.Shares
+                .Include(sh=>sh.Post)
+                    .ThenInclude(pos=>pos.Creator)
+                .Include(sh=>sh.Post)
+                    .ThenInclude(pos=>pos.LikedBy)
+                .Where(sh=>sh.SharerId==id).ToList();
+            List<TextPost> RTs = new List<TextPost>();
+            foreach (Share connect in sharesConnects)
+            {
+                connect.Post.isRT=true;
+                connect.Post.Reposter=renderMe.PageOwner;
+                RTs.Add(connect.Post);
+            }
+            renderMe.TLPosts.AddRange(RTs);
+            //sort by created at for all
+            renderMe.TLPosts = renderMe.TLPosts.OrderByDescending(po=>po.CreatedAt).ToList();
             return View("UserPage", renderMe);
         }
         [HttpGet("follow/{id}")]

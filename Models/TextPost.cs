@@ -22,7 +22,9 @@ namespace FinalProject.Models
         [NotMapped]
         public bool isRT { get; set; }= false;
         [NotMapped]
-        public int Reposter { get; set; }
+        public int ReposterId { get; set; }
+        [NotMapped]
+        public User Reposter { get; set; }
         [NotMapped]
         public double Quality { get; set; }
         

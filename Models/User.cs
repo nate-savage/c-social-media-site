@@ -35,6 +35,10 @@ namespace FinalProject.Models
         public string Confirm { get; set; }
         [NotMapped]
         public List<Follow> Follows { get; set; }
+        [NotMapped]
+        public int NumFollowers { get; set; }
+        [NotMapped]
+        public int NumFollowing { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
     }

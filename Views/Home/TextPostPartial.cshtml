@@ -1,0 +1,21 @@
+@using FinalProject.Models
+@model TextPost
+<div class="row border border-primary rounded m-2 p-2 w-20 h-25" >  
+
+                <div >
+                    <p >
+                        @if(@Model.isRT)
+                        {
+                            <p>Reposted by @Model.Reposter.DisplayName</p>
+                        }
+                        <span class="font-weight-bold">@Model.Creator.DisplayName</span>  
+                    <a href="/user/@Model.CreatorId">@@@Model.Creator.Handle </a>
+                    <br>@Model.Text
+                    <br>
+                    <a href="/changelike/@Model.TextPostId/home">❤️</a> @Model.LikedBy.Count likes
+                    <br>
+                    <a href="/changerepost/@Model.TextPostId/home">🔁</a> @Model.SharedBy.Count shares</p>
+                    
+                </div>
+
+            </div>
