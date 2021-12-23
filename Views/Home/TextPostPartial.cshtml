@@ -2,7 +2,7 @@
 @model TextPost
 <div class="row border border-primary rounded m-2 p-2 w-20 h-25" >  
 
-                <div >
+                
                     <p >
                         @if(@Model.isRT)
                         {
@@ -15,7 +15,31 @@
                     <a href="/changelike/@Model.TextPostId/home">❤️</a> @Model.LikedBy.Count likes
                     <br>
                     <a href="/changerepost/@Model.TextPostId/home">🔁</a> @Model.SharedBy.Count shares</p>
+                        @{
+                            int diff = (int)(@DateTime.Now-@Model.CreatedAt).TotalSeconds;
+                            if(diff<60)
+                            {
+                                <p class = " text-right font-weight-light">@diff s</p>
+                            }
+                            else if (diff < (60*60))
+                            {
+                                diff = diff/60;
+                                <p class = " text-right font-weight-light">@diff m</p>
+                            }
+                            else if (diff < (60*60*24))
+                            {
+                                diff = diff/(60*60);
+                                <p class = " text-right font-weight-light">@diff h</p>
+                            }
+                            else
+                            {
+                                diff = diff/(60*60*24);
+                                <p class = " text-right font-weight-light">@diff d</p>
+                            }
+                        }
                     
-                </div>
+                    
+                    
+                
 
             </div>

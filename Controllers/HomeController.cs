@@ -57,8 +57,13 @@ namespace FinalProject.Controllers
                 var userInDb = _context.Users.FirstOrDefault(u => u.Email == fromForm.LogEmail);
                 if(userInDb == null)
                 {
-                    ModelState.AddModelError("LogEmail", "Invalid Email/Password");
-                    return Index();
+                    
+                    userInDb =_context.Users.FirstOrDefault(u => u.Handle == fromForm.LogEmail);
+                    if(userInDb == null)
+                    {
+                        ModelState.AddModelError("LogEmail", "Invalid Email/ Handle");
+                        return Index();
+                    }
                 }
                 var hasher = new PasswordHasher<Login>();
                 
@@ -68,11 +73,11 @@ namespace FinalProject.Controllers
                 // result can be compared to 0 for failure
                 if(result == 0)
                 {
-                    ModelState.AddModelError("LogEmail", "Invalid Email/Password");
+                    ModelState.AddModelError("LogEmail", "Invalid Password");
                     return Index();
                 }
                 HttpContext.Session.SetInt32("UserId",userInDb.UserId);
-                //send them to the dashbaord
+                //send them to the home view
                 return RedirectToAction("Home");
             }
             return Index();

@@ -8,8 +8,7 @@ namespace FinalProject.Models
     public class Login
     {
         [Required]
-        [EmailAddress]
-        [Display(Name ="Email")]
+        [Display(Name ="Email or Handle (case sensitive)")]
         public string LogEmail { get; set; }
         [Required]
         [Display(Name ="Password")]
