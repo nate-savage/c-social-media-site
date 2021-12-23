@@ -33,6 +33,8 @@ namespace FinalProject.Models
         [Display(Name ="Confirm Password")]
         [Compare("Password", ErrorMessage ="Passwords must match.")]
         public string Confirm { get; set; }
+        [NotMapped]
+        public List<Follow> Follows { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
     }

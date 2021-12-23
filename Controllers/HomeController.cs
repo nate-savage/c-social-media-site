@@ -111,12 +111,41 @@ namespace FinalProject.Controllers
         [HttpGet("timeline/{id}")]
         public IActionResult TimeLine(int id)
         {
-            int userId = (int)HttpContext.Session.GetInt32("UserId");
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if(userId == null)
+            {
+                return RedirectToAction("Index");
+            }
             TimeLineView renderMe = new TimeLineView()
             {
                 SiteUser = _context.Users.FirstOrDefault(us=>us.UserId==userId),
-
+                //posts by user
+                TLPosts = _context.TextPosts
+                    .Include(blah=>blah.Creator)
+                    .Include(blah=>blah.LikedBy)
+                    .Include(blah=>blah.SharedBy)
+                    .Where(pos=>pos.CreatorId==userId).ToList()
             };
+            //posts from follow
+            List<Follow> UserFollows = _context.Follows
+                .Where(fol=>fol.FollowerId==userId).ToList();
+            foreach(Follow followConnect in UserFollows)
+            {
+                renderMe.TLPosts.AddRange(
+                _context.TextPosts
+                    .Include(blah=>blah.Creator)
+                    .Include(blah=>blah.LikedBy)
+                    .Include(blah=>blah.SharedBy)
+                    .Where(pos=>pos.CreatorId==followConnect.FolloweeId).ToList());
+
+            }
+            // renderMe.TLPosts = renderMe.TLPosts.OrderByDescending(li=>li.CreatedAt).ToList();
+            foreach (TextPost post in renderMe.TLPosts)
+            {
+                post.SetQuality();
+            }
+            renderMe.TLPosts = renderMe.TLPosts.OrderByDescending(li=>li.Quality).ToList();
+
             return View("TimeLine",renderMe);
         }
         [HttpPost("post/submit")]
@@ -140,7 +169,11 @@ namespace FinalProject.Controllers
         [HttpGet("user/{id}")]
         public IActionResult UserPage(int id)
         {
-            int userId = (int)HttpContext.Session.GetInt32("UserId");
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if(userId == null)
+            {
+                return RedirectToAction("Index");
+            }
             UserPageView renderMe = new UserPageView()
             {
                 PageOwner = _context.Users.FirstOrDefault(us=>us.UserId==id),
@@ -213,6 +246,32 @@ namespace FinalProject.Controllers
             _context.SaveChanges();
             return RedirectToAction(from);
         }
+        [HttpGet("changerepost/{id}/{from}")]
+        public IActionResult ChangeRepost(int id, string from)
+        {
+            int userId = (int)HttpContext.Session.GetInt32("UserId");
+            if(_context.Shares.Any(sha=>sha.SharerId==userId&&sha.PostId==id))
+            {
+                Share deleteMe = _context.Shares.FirstOrDefault(sha=>sha.SharerId==userId&&sha.PostId==id);
+                _context.Remove(deleteMe);
+                _context.SaveChanges();
+            }
+            else
+            {
+                Share newShare = new Share()
+                {
+                    SharerId = userId,
+                    PostId = id
+                };
+                _context.Add(newShare);
+                _context.SaveChanges();
+            }
+            return RedirectToAction(from);
+
+        }
+
+        //this logs you in as a test user for dev purposes 
+        //delete l8r
         [HttpGet("testroute")]
         public IActionResult TestRoute()
         {

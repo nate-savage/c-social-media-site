@@ -7,7 +7,7 @@ namespace FinalProject.Models
 {
     public class TimeLineView
     {
-        public TimeLine timeLine { get; set; }
+        public List<TextPost> TLPosts { get; set; }
         public TextPost newPost { get; set; }
         public User SiteUser { get; set; }
     

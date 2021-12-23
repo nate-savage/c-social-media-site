@@ -16,6 +16,9 @@
 
             <a href="/logout">logout</a>
         </div>
+        <div>
+            <a href="/home">all posts on the site</a>
+        </div>
 
         <div class="row">
 
@@ -49,20 +52,20 @@
 
         <div class="col-5">
 
-        @foreach(TextPost post in @Model.timeLine.TLPosts)
+        @foreach(TextPost post in @Model.TLPosts)
         {
         <div class="row border border-primary rounded m-2 p-2 w-20 h-25" >  
 
                 <div >
                     <p ><span class="font-weight-bold">@post.Creator.DisplayName</span>  
                     <a href="/user/@post.CreatorId">@@@post.Creator.Handle </a>
-                    <br>@post.Text
+                    <br>@post.Text 
                     <br>
                     
                     
                     <a href="/changelike/@post.TextPostId/home">❤️</a> @post.LikedBy.Count likes
                     <br>
-                    <a href="/repost/@post.TextPostId/home">🔁</a> @post.SharedBy.Count shares</p>
+                    <a href="/changerepost/@post.TextPostId/home">🔁</a> @post.SharedBy.Count shares</p>
                     
                 </div>
 
